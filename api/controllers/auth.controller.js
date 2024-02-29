@@ -7,7 +7,6 @@ export const signup = (req, res, next) => {
       res.status(201).json({ message: 'User created successfully', user: response });
     })
     .catch((err) => {
-      res.status(500).json(err);
       next(err)
     })
 };

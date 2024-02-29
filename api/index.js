@@ -4,12 +4,13 @@ import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
 
-
 import indexRouter from './routes/index.route.js';
+
+import errorHandler from './middlewares/errorHandler.middleware.js';
 
 dotenv.config();
 
-// Conexión y generación de la base de datos
+// Connection and generation of the database
 mongoose
   .connect(process.env.MONGO)
   .then(() => {
@@ -33,11 +34,14 @@ app.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
 });
 
-// Middleware para manejar errores 404
+// Middleware to handle 404 errors
 app.use((req, res, next) => {
   const err = new Error('Path not Found');
   err.status = 404;
   next(err);
 });
+
+// Middleware to handle errors
+app.use(errorHandler);
 
 export default app;
