@@ -1,6 +1,18 @@
 import { authService } from '../services/auth.services.js';
 
-export const signup = (req, res, next) => {
+const signin = (req, res, next) => {
+  const { email, password } = req.body;
+  authService.signin(email, password)
+    .then(({ user, token }) => {
+      res.cookie('access_token', token, { httpOnly: true })
+      res.status(200).json({ user })
+    })
+    .catch((err) => {
+      next(err);
+    })
+};
+
+const signup = (req, res, next) => {
   const user = req.body;
   authService.signup(user)
     .then((response) => {
@@ -9,4 +21,9 @@ export const signup = (req, res, next) => {
     .catch((err) => {
       next(err)
     })
+};
+
+export {
+  signin,
+  signup
 };
