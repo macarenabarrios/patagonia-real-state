@@ -16,9 +16,9 @@ const signin = async (email, password) => {
     const validUser = await User.findOne({
       email
     });
-    if (!validUser) return next(customError(404, 'User not found'));
+    if (!validUser) throw customError(404, 'User not found');
     const validPassword = bcryptjs.compareSync(password, validUser.password);
-    if (!validPassword) return next(customError(404, 'Wrong credentials!'));
+    if (!validPassword) throw customError(404, 'Wrong credentials!');
     const token = await generateToken(validUser);
     const { password: pass, ...rest } = validUser._doc;
     return { user: rest, token };
