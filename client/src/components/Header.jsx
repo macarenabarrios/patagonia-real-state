@@ -1,7 +1,18 @@
 import { FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { UserAuth } from '../context/AuthContext';
 
 export default function Header() {
+  const { user, logOut } = UserAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <header className='bg-slate-200 shadow-md'>
       <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
@@ -22,9 +33,14 @@ export default function Header() {
           <Link to='/sobre-nosotros'>
             <li className='hidden sm:inline text-slate-700 hover:underline'>Nosotros</li>
           </Link>
-          <Link to='/iniciar-sesion'>
-            <li className='text-slate-700 hover:underline'>Iniciar sesión</li>
-          </Link>
+          {user?.displayName ?
+            <button onClick={handleSignOut}><li className='text-slate-700 hover:underline'>Cerrar sesión</li></button>
+            :
+            <Link to='/iniciar-sesion'>
+              <li className='text-slate-700 hover:underline'>Iniciar sesión</li>
+            </Link>
+          }
+
         </ul>
       </div>
     </header>

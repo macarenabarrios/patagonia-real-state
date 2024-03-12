@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { UserAuth } from '../context/AuthContext';
 
 export default function SignUp() {
 
@@ -15,6 +16,7 @@ export default function SignUp() {
     });
   };
 
+  /*
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -46,7 +48,27 @@ export default function SignUp() {
       setError(error.message);
     }
   };
+  */
 
+  /* ************************ */
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const { createUser } = UserAuth();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    try {
+      await createUser(email, password);
+    } catch (error) {
+      console.log(error.message);
+      setError(error.message);
+    }
+  }
+
+  /* ******************************** */
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl text-center font-semibold my-7'>Registrarse</h1>

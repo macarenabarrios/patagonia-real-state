@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'; //hook
 import { signInStart, siginInSuccess, signInFailure } from '../redux/user/userSlice.js';
+import { UserAuth } from '../context/AuthContext.jsx';
+import GoogleButton from '../components/GoogleButton.jsx';
+
 
 export default function SignIn() {
 
@@ -21,7 +24,7 @@ export default function SignIn() {
     e.preventDefault();
 
     try {
-      dispatch(signInStart)
+      dispatch(signInStart());
 
       const res = await fetch('/api/auth/signin',
         {
@@ -34,7 +37,6 @@ export default function SignIn() {
 
       const data = await res.json();
 
-
       if (data.error && data.error.success === false) {
         console.log(data);
         dispatch(signInFailure(data.error.message));
@@ -42,8 +44,7 @@ export default function SignIn() {
       }
 
       dispatch(siginInSuccess(data));
-      navigate('/');
-
+      //navigate('/');
 
     } catch (error) {
       dispatch(signInFailure(error.message));
@@ -57,6 +58,7 @@ export default function SignIn() {
         <input type='email' placeholder='email' className='border p-3 rpimded-lg' id='email' onChange={handleChange} />
         <input type='password' placeholder='contraseña' className='border p-3 rpimded-lg' id='password' onChange={handleChange} />
         <button disabled={loading} className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>{loading ? 'Cargando...' : 'Iniciar sesión'}</button>
+        <GoogleButton />
       </form>
       <div className='flex gap-2 mt-5'>
         <p>No tiene una cuenta?</p>
