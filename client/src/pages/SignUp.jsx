@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserAuth } from '../context/AuthContext';
 
 export default function SignUp() {
 
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -16,13 +19,11 @@ export default function SignUp() {
     });
   };
 
-  /*
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setError('');
+    setLoading(true);
     try {
-      setLoading(true);
-
       const res = await fetch('/api/auth/signup',
         {
           method: 'POST',
@@ -33,6 +34,7 @@ export default function SignUp() {
         });
 
       const data = await res.json();
+      console.log("🟢 Data:", data);
 
       if (data.success === false) {
         setLoading(false);
@@ -43,32 +45,14 @@ export default function SignUp() {
       setLoading(false);
       setError(null);
       navigate('/iniciar-sesion');
-    } catch (error) {
-      setLoading(false);
-      setError(error.message);
-    }
-  };
-  */
 
-  /* ************************ */
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const { createUser } = UserAuth();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    try {
-      await createUser(email, password);
     } catch (error) {
       console.log(error.message);
+      setLoading(false);
       setError(error.message);
     }
   }
 
-  /* ******************************** */
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl text-center font-semibold my-7'>Registrarse</h1>
